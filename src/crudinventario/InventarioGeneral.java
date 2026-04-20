@@ -6,7 +6,7 @@ package crudinventario;
 
 /**
  *
- * @author dogza
+ * @author abc
  */
 public class InventarioGeneral {
 
@@ -17,6 +17,7 @@ public class InventarioGeneral {
         // TODO code application logic here
         frmMain fMain = new frmMain();
         fMain.setVisible(true);
+
     }
-    
+
 }

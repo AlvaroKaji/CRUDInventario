@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package crudinventario;
 
 import java.io.BufferedReader;
@@ -15,52 +11,45 @@ import java.util.ArrayList;
  *
  * @author abc
  */
-public class mArticulo {
+public class mClientes {
 
-    public void Insertar(String cadenaArticulo) {
+    public void Insertar(String cadenaCliente) {
         try {
-            // Esta linea crea el archivo donde se guarda la informacion
-            FileWriter archivo = new FileWriter("listado_articulos.txt", true);
-            // Buffer temporal que se encarga de guardar los datos en el archivo
+            FileWriter archivo = new FileWriter("listado_clientes.txt", true);
             BufferedWriter buffer = new BufferedWriter(archivo);
 
-            // Escribe en el archivo de texto
-            buffer.write(cadenaArticulo);
-            // Agrega un salto de linea al registro
+            buffer.write(cadenaCliente);
             buffer.newLine();
-            // Guarda los registros en el archivo
             buffer.close();
-            // lblSaludo.setText("¡Archivo guardado con éxito!");
 
         } catch (IOException e) {
-            // lblSaludo.setText("Error al guardar el archivo: " + e.getMessage());
+            System.err.println("Error al guardar el archivo: " + e.getMessage());
         }
-
     }
 
     public ArrayList<String> Consultar() {
         ArrayList<String> listaRegistros = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("listado_articulos.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("listado_clientes.txt"))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split("\\|");
 
-                // 1. Corregimos el formato: agregamos espacios y cambiamos ';' por ':'
-                String datoBonito = "Codigo: " + datos[0] + "| Descripcion: " + datos[1] + "| Precio: " + datos[2];
+                // Formato: No. Cliente: [0]| Nombre: [1]| Tipo: [2]| Razon Social: [3]
+                String datoBonito = "No. Cliente: " + datos[0] + "| Nombre: " + datos[1] + "| Tipo: " + datos[2]
+                        + "| Razon Social: " + datos[3];
 
                 listaRegistros.add(datoBonito);
             }
         } catch (IOException e) {
-            System.out.print("Mensaje de error: " + e.getMessage());
-            listaRegistros.add("Error al cargar los datos");
+            System.err.println("Mensaje de error: " + e.getMessage());
         }
 
         return listaRegistros;
     }
 
-    public void update(String lineActual, String lineaNueva, String archivoOriginal) {
+    public void Update(String lineActual, String lineaNueva, String archivoOriginal) {
         java.io.File fileOriginal = new java.io.File(archivoOriginal);
-        java.io.File fileTemporal = new java.io.File("temporal.txt");
+        java.io.File fileTemporal = new java.io.File("temporal_clientes.txt");
 
         String lineaLeida;
         Boolean actualizado = false;
@@ -69,12 +58,7 @@ public class mArticulo {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemporal));) {
 
             while ((lineaLeida = br.readLine()) != null) {
-                String[] datosLeidos = lineaLeida.split("\\|");
-                String[] datosActuales = lineActual.split("\\|");
-
-                // Comparamos por el primer campo (el código) para que sea más robusto
-                if (datosLeidos.length > 0 && datosActuales.length > 0
-                        && datosLeidos[0].trim().equals(datosActuales[0].trim())) {
+                if (lineaLeida.equals(lineActual)) {
                     bw.write(lineaNueva);
                     bw.newLine();
                     actualizado = true;
@@ -88,7 +72,6 @@ public class mArticulo {
             System.out.println("Error al actualizar" + e.getMessage());
         }
 
-        // Eliminacion de archiv0o original
         if (actualizado) {
             if (fileOriginal.delete()) {
                 fileTemporal.renameTo(fileOriginal);
@@ -102,10 +85,9 @@ public class mArticulo {
         }
     }
 
-    public void delete(String lineActual, String archivoOriginal) {
-
+    public void Delete(String lineActual, String archivoOriginal) {
         java.io.File fileOriginal = new java.io.File(archivoOriginal);
-        java.io.File fileTemporal = new java.io.File("temporal.txt");
+        java.io.File fileTemporal = new java.io.File("temporal_clientes.txt");
 
         String lineaLeida;
         Boolean eliminado = false;
@@ -114,12 +96,7 @@ public class mArticulo {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(fileTemporal));) {
 
             while ((lineaLeida = br.readLine()) != null) {
-                String[] datosLeidos = lineaLeida.split("\\|");
-                String[] datosActuales = lineActual.split("\\|");
-
-                // Comparamos por el primer campo (el código) para que sea más robusto
-                if (datosLeidos.length > 0 && datosActuales.length > 0 &&
-                        datosLeidos[0].trim().equals(datosActuales[0].trim())) {
+                if (lineaLeida.equals(lineActual)) {
                     eliminado = true;
                 } else {
                     bw.write(lineaLeida);
@@ -131,7 +108,6 @@ public class mArticulo {
             System.out.println("Error al borrar" + e.getMessage());
         }
 
-        // Eliminacion de archiv0o original
         if (eliminado) {
             if (fileOriginal.delete()) {
                 fileTemporal.renameTo(fileOriginal);
@@ -144,5 +120,4 @@ public class mArticulo {
             System.out.println("No se encuentro el registro");
         }
     }
-
 }

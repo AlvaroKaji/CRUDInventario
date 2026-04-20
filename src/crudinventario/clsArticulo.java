@@ -9,69 +9,86 @@ import javax.swing.DefaultListModel;
 
 /**
  *
- * @author dogza
+ * @author abc
  */
 public class clsArticulo {
-    
+    // atributos que necesito que tenga mi objeto
     private String codigo;
     private String descripcion;
     private Double precio;
-    
-    public clsArticulo(String codigo , String descripcion, Double precio){
+
+    // constructor
+    public clsArticulo(String codigo, String descripcion, Double precio) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precio = precio;
-    }
-    
-    public clsArticulo(){
 
     }
     
-    public String aTexto(){
-        String articulo = this.codigo + "|" + this.descripcion + "|" + this.precio;
-        return articulo;
+    public clsArticulo(){
+    
     }
     
+    // imprimir en consola los datos del articulo
+    public String aTexto() {
+        // Solo retornamos la cadena, no imprimimos aquí
+        return this.codigo + "|" + this.descripcion + "|" + this.precio;
+    }
+    
+    public String getDescripcion(){
+        return this.descripcion;
+    }
+
+    // guardar informacion
     public void guardar() {
-        
-        mArticulo articulo = new mArticulo();
-        articulo.insertar(this.aTexto());
-        System.out.println(this.aTexto());
+        mArticulo article = new mArticulo();
+        String textoArticulo = this.aTexto(); // Obtenemos el texto una sola vez
+
+        // Enviamos la cadena para guardar en el archivo
+        article.Insertar(textoArticulo);
+
+        // Si quieres verlo en consola una sola vez:
+        System.out.println(textoArticulo);
     }
     
-    public DefaultListModel<String> LlenarLista(){
-        mArticulo mArticle = new mArticulo();
-        ArrayList<String> datos = mArticle.consultar();
-        DefaultListModel<String> modelLista = new DefaultListModel();
-        for ( String registro: datos){
+    public DefaultListModel<String> llenarLista(){
+        mArticulo MArticle = new mArticulo();
+        
+        ArrayList<String> datos = MArticle.Consultar();
+        
+        DefaultListModel<String> modelLista = new DefaultListModel<>();
+        
+        for (String registro: datos){
             modelLista.addElement(registro);
         }
+        
         return modelLista;
     }
     
-    public void actualizar(String newCodigo , String newDescripcion , String newPrecio) {
+    public void actualizar(String newCOdigo, String newDescripcion, String newPrecio){
+        String nuevaLinea  = newCOdigo + "|" + newDescripcion + "|" + newPrecio;
         
-        String nuevaLinea = newCodigo + "|" + newDescripcion + "|" + newPrecio;
         String lineaOriginal = this.codigo + "|" + this.descripcion + "|" + this.precio;
         
-        System.out.println("Valores nuevos" + nuevaLinea);
-        System.out.println("Valores originales" + lineaOriginal);
+        //Imprimir los nuevos valores
+        System.out.println("Nuevos valores" + nuevaLinea);
+        System.out.println("Valores Originales:" + lineaOriginal);
         
+        //Solicita la actualizacion del registro
         mArticulo mArticle = new mArticulo();
-        mArticle.update(lineaOriginal, nuevaLinea , "listado_articulos.txt");
+        
+        mArticle.update(lineaOriginal, nuevaLinea, "listado_articulos.txt");
     }
     
-    public String getDescripcion() {
-        return this.descripcion;
-    }
-    
-    public void eliminar() {
+    public void eliminar(){
+        
         String lineaOriginal = this.codigo + "|" + this.descripcion + "|" + this.precio;
-         
-        System.out.println("Valores originales" + lineaOriginal);
         
+        System.out.println("Valores Originales:" + lineaOriginal);
+        
+        //Solicita la aeliminacion del registro
         mArticulo mArticle = new mArticulo();
-        mArticle.delete(lineaOriginal,"listado_articulos.txt");
-        
+        mArticle.delete(lineaOriginal, "listado_articulos.txt");
     }
+    
 }
